@@ -16,12 +16,15 @@ public class TwitchChatMessageEventHandler implements Consumer<IRCMessageEvent> 
     public static Logger log = LoggerFactory.getLogger(TwitchChatMessageEventHandler.class);
     private final MessageToCommandsConverter converter;
     private final SaveCommandAction saveCommandAction;
+    private final SendChatMessageAction sendChatMessageAction;
 
-    public TwitchChatMessageEventHandler(SaveCommandAction saveCommandAction) {
+    public TwitchChatMessageEventHandler(SaveCommandAction saveCommandAction,
+                                         SendChatMessageAction sendChatMessageAction) {
+
         this.saveCommandAction = saveCommandAction;
+        this.sendChatMessageAction = sendChatMessageAction;
         converter = new MessageToCommandsConverter();
     }
-
 
     @Override
     public void accept(IRCMessageEvent ircMessageEvent) {
@@ -38,6 +41,7 @@ public class TwitchChatMessageEventHandler implements Consumer<IRCMessageEvent> 
                 userCommands.forEach(saveCommandAction::execute);
             } catch (InvalidUserCommandException e) {
                 log.error(e.getMessage());
+                sendChatMessageAction.execute(e.getMessage());
             }
         }
     }

@@ -23,7 +23,8 @@ public class TwitchChatMessageEventHandlerTest {
     public void before(){
         commandManager = new CommandManager();
         SaveCommandAction saveCommandAction = new SaveCommandAction(commandManager);
-        eventHandler = new TwitchChatMessageEventHandler(saveCommandAction);
+        SendChatMessageAction sendChatMessageAction = new SendChatMessageAction(mock(TwitchService.class));
+        eventHandler = new TwitchChatMessageEventHandler(saveCommandAction, sendChatMessageAction);
 
     }
 
