@@ -1,5 +1,7 @@
 package Utils;
 
+import java.util.function.Function;
+
 /**
  * Custom Function functional interface that throws Exception
  *
@@ -8,7 +10,7 @@ package Utils;
  * @param <K> the type of the exception thrown by the function that extends Exception class
  */
 @FunctionalInterface
-public interface FunctionWithException<T, R, K extends Exception>{
+public interface FunctionWithException<T, R, K extends Exception> {
 
     /**
      * Applies this function to the given argument.
