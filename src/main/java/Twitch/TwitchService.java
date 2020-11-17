@@ -1,7 +1,7 @@
 package Twitch;
 
 import com.github.twitch4j.TwitchClient;
-import exception.EmptyChatMessageException;
+import exception.EmptyMessageException;
 
 public class TwitchService {
     private final TwitchClient twitchClient;
@@ -12,11 +12,11 @@ public class TwitchService {
         CHANNEL_NAME = channel_name;
     }
 
-    public void sendChatMessage(String content) throws EmptyChatMessageException {
-        if(content == null || content.isEmpty()){
-            throw new EmptyChatMessageException("Cannot send empty message!");
+    public void sendChatMessage(String message) throws EmptyMessageException {
+        if(message == null || message.isEmpty()){
+            throw new EmptyMessageException("Cannot send empty chat message!");
         }
 
-        twitchClient.getChat().sendMessage(CHANNEL_NAME, content);
+        twitchClient.getChat().sendMessage(CHANNEL_NAME, message);
     }
 }

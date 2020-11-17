@@ -2,7 +2,7 @@ package Twitch;
 
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.chat.TwitchChat;
-import exception.EmptyChatMessageException;
+import exception.EmptyMessageException;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +40,7 @@ public class TwitchServiceTest {
 
         // When
         TwitchChat mockedTwitchChat = mock(TwitchChat.class);
-        Assertions.assertThrows(EmptyChatMessageException.class, () -> twitchService.sendChatMessage(testMessage));
+        Assertions.assertThrows(EmptyMessageException.class, () -> twitchService.sendChatMessage(testMessage));
 
         // Then
         verify(mockedTwitchChat, times(0)).sendMessage(TEST_CHANNEL_NAME, testMessage);
@@ -55,7 +55,7 @@ public class TwitchServiceTest {
 
         // When
         TwitchChat mockedTwitchChat = mock(TwitchChat.class);
-        Assertions.assertThrows(EmptyChatMessageException.class, () -> twitchService.sendChatMessage(testMessage));
+        Assertions.assertThrows(EmptyMessageException.class, () -> twitchService.sendChatMessage(testMessage));
 
         // Then
         verify(mockedTwitchChat, times(0)).sendMessage(TEST_CHANNEL_NAME, testMessage);

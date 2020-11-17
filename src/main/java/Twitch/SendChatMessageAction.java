@@ -1,7 +1,7 @@
 package Twitch;
 
 import Utils.IEnvAction;
-import exception.EmptyChatMessageException;
+import exception.EmptyMessageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ public class SendChatMessageAction implements IEnvAction<String > {
     public void execute(String message) {
         try {
             twitchService.sendChatMessage(message);
-        } catch (EmptyChatMessageException e) {
+        } catch (EmptyMessageException e) {
             log.error(e.getMessage());
         }
     }
