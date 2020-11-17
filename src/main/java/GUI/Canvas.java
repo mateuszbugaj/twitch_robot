@@ -18,7 +18,8 @@ public class Canvas extends PApplet {
     public void setup() {
         textSize(15);
         textAlign(LEFT, TOP);
-        ubuntuFont = createFont("D:\\GithubRepos\\twitch_robot\\src\\main\\resources\\UbuntuMono-Regular.ttf", 15);
+//        ubuntuFont = createFont("D:\\GithubRepos\\twitch_robot\\src\\main\\resources\\UbuntuMono-Regular.ttf", 15);
+        ubuntuFont = createFont("UbuntuMono-Regular.ttf", 15);
         textFont(ubuntuFont);
     }
 
