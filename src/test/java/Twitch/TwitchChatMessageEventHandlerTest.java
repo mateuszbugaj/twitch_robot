@@ -25,7 +25,6 @@ public class TwitchChatMessageEventHandlerTest {
         SaveCommandAction saveCommandAction = new SaveCommandAction(commandManager);
         SendChatMessageAction sendChatMessageAction = new SendChatMessageAction(mock(TwitchService.class));
         eventHandler = new TwitchChatMessageEventHandler(saveCommandAction, sendChatMessageAction);
-
     }
 
     @Test
