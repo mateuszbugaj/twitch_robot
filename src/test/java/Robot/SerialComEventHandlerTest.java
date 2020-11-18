@@ -29,7 +29,7 @@ class SerialComEventHandlerTest {
 
         when(mockedSerialPortEvent.getSerialPort()).thenReturn(mockedSerialPort);
 
-        commandManager = new CommandManager();
+        commandManager = new CommandManager(mock(SendSerialMessageAction.class));
         SaveRobotLogAction saveRobotLog = new SaveRobotLogAction(commandManager);
         serialComEventHandler = Mockito.spy(new SerialComEventHandler(saveRobotLog));
     }

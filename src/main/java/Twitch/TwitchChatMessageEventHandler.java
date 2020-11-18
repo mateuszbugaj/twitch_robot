@@ -2,6 +2,7 @@ package Twitch;
 
 import Managment.SaveCommandAction;
 import Managment.UserCommand;
+import Utils.IEnvAction;
 import Utils.MessageToCommandsConverter;
 import com.github.twitch4j.chat.events.channel.IRCMessageEvent;
 import exception.InvalidUserCommandException;
@@ -15,11 +16,11 @@ import java.util.stream.Collectors;
 public class TwitchChatMessageEventHandler implements Consumer<IRCMessageEvent> {
     public static Logger log = LoggerFactory.getLogger(TwitchChatMessageEventHandler.class);
     private final MessageToCommandsConverter converter;
-    private final SaveCommandAction saveCommandAction;
-    private final SendChatMessageAction sendChatMessageAction;
+    private final IEnvAction<UserCommand> saveCommandAction;
+    private final IEnvAction<String > sendChatMessageAction;
 
-    public TwitchChatMessageEventHandler(SaveCommandAction saveCommandAction,
-                                         SendChatMessageAction sendChatMessageAction) {
+    public TwitchChatMessageEventHandler(IEnvAction<UserCommand> saveCommandAction,
+                                         IEnvAction<String > sendChatMessageAction) {
 
         this.saveCommandAction = saveCommandAction;
         this.sendChatMessageAction = sendChatMessageAction;

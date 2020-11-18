@@ -7,7 +7,6 @@ import processing.core.PFont;
 
 public class Canvas extends PApplet {
     Logger log = LoggerFactory.getLogger(Canvas.class);
-    public static PFont ubuntuFont;
 
     @Override
     public void settings() {
@@ -18,7 +17,7 @@ public class Canvas extends PApplet {
     public void setup() {
         textSize(15);
         textAlign(LEFT, TOP);
-        ubuntuFont = createFont("UbuntuMono-Regular.ttf", 15);
+        PFont ubuntuFont = createFont("UbuntuMono-Regular.ttf", 15);
         textFont(ubuntuFont);
     }
 

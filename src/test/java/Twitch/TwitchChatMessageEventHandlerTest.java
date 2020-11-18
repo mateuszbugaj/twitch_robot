@@ -2,6 +2,7 @@ package Twitch;
 
 import Managment.CommandManager;
 import Managment.SaveCommandAction;
+import Robot.SendSerialMessageAction;
 import com.github.twitch4j.chat.events.channel.IRCMessageEvent;
 import org.junit.Assert;
 import org.junit.Before;
@@ -21,7 +22,7 @@ public class TwitchChatMessageEventHandlerTest {
 
     @Before
     public void before(){
-        commandManager = new CommandManager();
+        commandManager = new CommandManager(mock(SendSerialMessageAction.class));
         SaveCommandAction saveCommandAction = new SaveCommandAction(commandManager);
         SendChatMessageAction sendChatMessageAction = new SendChatMessageAction(mock(TwitchService.class));
         eventHandler = new TwitchChatMessageEventHandler(saveCommandAction, sendChatMessageAction);
@@ -32,6 +33,7 @@ public class TwitchChatMessageEventHandlerTest {
         // Given
         String testMessage = "!x10 y20";
         String commandContent = "x10 y20";
+        commandManager.update(false); // robot is not waiting
 
         IRCMessageEvent ircMessageEvent = mock(IRCMessageEvent.class);
         when(ircMessageEvent.getMessage()).thenReturn(Optional.of(testMessage));
@@ -41,11 +43,10 @@ public class TwitchChatMessageEventHandlerTest {
         eventHandler.accept(ircMessageEvent);
 
         // Then
-        Assert.assertEquals(1, commandManager.commandQueue.size());
-        if(commandManager.commandQueue.size() > 0){
-            Assert.assertEquals(commandManager.commandQueue.peek().getContent(), commandContent);
-            Assert.assertEquals(commandManager.commandQueue.peek().getUserName(), "user");
-        }
+
+
+        int commandQueueSize = commandManager.getCommandQueueSize();
+        Assert.assertEquals(1, commandQueueSize);
     }
 
     @Test
@@ -61,13 +62,15 @@ public class TwitchChatMessageEventHandlerTest {
         eventHandler.accept(ircMessageEvent);
 
         // Then
-        Assert.assertEquals(0, commandManager.commandQueue.size());
+        int commandQueueSize = commandManager.getCommandQueueSize();
+        Assert.assertEquals(0, commandQueueSize);
     }
 
     @Test
     public void testReceivingMultilineCommandFromChat(){
         // Given
         String testMessage = "!x10 y20; z30";
+        commandManager.update(false); // robot is not waiting
 
         IRCMessageEvent ircMessageEvent = mock(IRCMessageEvent.class);
         when(ircMessageEvent.getMessage()).thenReturn(Optional.of(testMessage));
@@ -77,7 +80,8 @@ public class TwitchChatMessageEventHandlerTest {
         eventHandler.accept(ircMessageEvent);
 
         // Then
-        Assert.assertEquals(2, commandManager.commandQueue.size());
+        int commandQueueSize = commandManager.getCommandQueueSize();
+        Assert.assertEquals(2, commandQueueSize);
     }
 
     @Test
@@ -93,6 +97,7 @@ public class TwitchChatMessageEventHandlerTest {
         eventHandler.accept(ircMessageEvent);
 
         // Then
-        Assert.assertEquals(0, commandManager.commandQueue.size());
+        int commandQueueSize = commandManager.getCommandQueueSize();
+        Assert.assertEquals(0, commandQueueSize);
     }
 }

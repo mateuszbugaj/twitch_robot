@@ -1,17 +1,27 @@
 package Robot;
 
 import Managment.SaveRobotLogAction;
+import Utils.IEnvAction;
+import Utils.Subscriber;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SerialComEventHandler implements SerialPortDataListener {
-    private final SaveRobotLogAction saveRobotLogAction;
+    private final IEnvAction<String> saveRobotLogAction;
     private final int CUTOFF_ASCII = 10; // Line feed character
     private String connectedMessage = "";
+    private List<Subscriber> subscribers = new ArrayList<>();
 
-    public SerialComEventHandler(SaveRobotLogAction saveRobotLogAction) {
+    public SerialComEventHandler(IEnvAction<String> saveRobotLogAction) {
         this.saveRobotLogAction = saveRobotLogAction;
+    }
+
+    public void subscribe(Subscriber subscriber){
+        subscribers.add(subscriber);
     }
 
     @Override
@@ -31,6 +41,7 @@ public class SerialComEventHandler implements SerialPortDataListener {
             connectedMessage = connectedMessage.substring(connectedMessage.indexOf(CUTOFF_ASCII) + 1);
 
             saveRobotLogAction.execute(outputString);
+            robotIsWaiting();
         }
 
     }
@@ -41,6 +52,10 @@ public class SerialComEventHandler implements SerialPortDataListener {
         serialPort.readBytes(buffer, bytesAvailable);
 
         return new String(buffer);
+    }
+
+    public void robotIsWaiting(){
+        subscribers.forEach(sub -> sub.update(true));
     }
 
 
