@@ -33,7 +33,6 @@ public class TwitchChatMessageEventHandlerTest {
         // Given
         String testMessage = "!x10 y20";
         String commandContent = "x10 y20";
-        commandManager.update(false); // robot is not waiting
 
         IRCMessageEvent ircMessageEvent = mock(IRCMessageEvent.class);
         when(ircMessageEvent.getMessage()).thenReturn(Optional.of(testMessage));
@@ -44,9 +43,9 @@ public class TwitchChatMessageEventHandlerTest {
 
         // Then
 
-
+        // Robot is waiting so one command should be immediately send to the robot
         int commandQueueSize = commandManager.getCommandQueueSize();
-        Assert.assertEquals(1, commandQueueSize);
+        Assert.assertEquals(0, commandQueueSize);
     }
 
     @Test
@@ -70,7 +69,6 @@ public class TwitchChatMessageEventHandlerTest {
     public void testReceivingMultilineCommandFromChat(){
         // Given
         String testMessage = "!x10 y20; z30";
-        commandManager.update(false); // robot is not waiting
 
         IRCMessageEvent ircMessageEvent = mock(IRCMessageEvent.class);
         when(ircMessageEvent.getMessage()).thenReturn(Optional.of(testMessage));
@@ -80,8 +78,10 @@ public class TwitchChatMessageEventHandlerTest {
         eventHandler.accept(ircMessageEvent);
 
         // Then
+        // Robot is waiting so one command should be immediately send to the robot
+        // and one should be saved in a queue
         int commandQueueSize = commandManager.getCommandQueueSize();
-        Assert.assertEquals(2, commandQueueSize);
+        Assert.assertEquals(1, commandQueueSize);
     }
 
     @Test

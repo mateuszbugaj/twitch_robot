@@ -1,17 +1,19 @@
 package Managment;
 
 import Utils.IEnvAction;
-import Utils.Subscriber;
+import Utils.RobotPoseSubscriber;
+import processing.core.PVector;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class CommandManager implements Subscriber {
+public class CommandManager implements RobotPoseSubscriber {
     private final IEnvAction<String > sendSerialMessageAction;
     private final Queue<UserCommand> commandQueue = new LinkedList<>();
     private Boolean robotWaiting = true;
     public ArrayList<String > robotLogs = new ArrayList<>();
+    public PVector currentPose = new PVector();
 
     public CommandManager(IEnvAction<String> sendSerialMessageAction) {
         this.sendSerialMessageAction = sendSerialMessageAction;
@@ -27,6 +29,7 @@ public class CommandManager implements Subscriber {
     }
 
     public void saveRobotLog(String log) {
+        robotWaiting = true;
         robotLogs.add(log);
     }
 
@@ -39,7 +42,7 @@ public class CommandManager implements Subscriber {
     }
 
     @Override
-    public void update(boolean context) {
-        robotWaiting = context;
+    public void updatePose(float x, float y, float z) {
+        currentPose.set(x, y, z);
     }
 }
