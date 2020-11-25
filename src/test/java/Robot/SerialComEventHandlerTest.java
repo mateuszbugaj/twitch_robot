@@ -61,7 +61,7 @@ class SerialComEventHandlerTest {
 
         // Then
         Float[] actual = new Float[]{
-                commandManager.currentPose.x, 
+                commandManager.currentPose.x,
                 commandManager.currentPose.y,
                 commandManager.currentPose.z
         };

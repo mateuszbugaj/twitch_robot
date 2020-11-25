@@ -7,10 +7,11 @@ import processing.core.PFont;
 
 public class Canvas extends PApplet {
     Logger log = LoggerFactory.getLogger(Canvas.class);
+    Simulation simulation;
 
     @Override
     public void settings() {
-        fullScreen();
+        fullScreen(P3D);
     }
 
     @Override
@@ -19,20 +20,25 @@ public class Canvas extends PApplet {
         textAlign(LEFT, TOP);
         PFont ubuntuFont = createFont("UbuntuMono-Regular.ttf", 15);
         textFont(ubuntuFont);
+
+        Simulation.p = this;
+        simulation = new Simulation();
     }
 
     @Override
     public void draw() {
         background(180);
-        fill(12, 12 ,12);
-        rect(0, 0, 350, height);
-        showConsoleText();
+
+        showConsole();
         showHelp();
+        simulation.show(1500, 800, -0.2f, 0.3f);
     }
 
-    private void showConsoleText(){
-        fill(204, 204, 204);
+    private void showConsole(){
+        fill(12, 12 ,12);
+        rect(0, 0, 350, height);
 
+        fill(204, 204, 204);
         String logo = """
                  ______               __          __    \s
                 /_  __/ _    __   _  / /_  ____  / /    \s
