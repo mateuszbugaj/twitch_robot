@@ -1,13 +1,26 @@
 package GUI;
 
+import Managment.CommandManager;
+import Managment.UserCommand;
+import Robot.SendSerialMessageAction;
+import Robot.SerialCom;
+import com.fazecast.jSerialComm.SerialPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import processing.core.PApplet;
 import processing.core.PFont;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 public class Canvas extends PApplet {
-    Logger log = LoggerFactory.getLogger(Canvas.class);
-    Simulation simulation;
+    public static Logger log = LoggerFactory.getLogger(Canvas.class);
+    private Simulation simulation;
+    private CommandManager commandManager;
+    private PFont ubuntuLogoFont;
+    private PFont ubuntuConsoleFont;
+
 
     @Override
     public void settings() {
@@ -18,11 +31,12 @@ public class Canvas extends PApplet {
     public void setup() {
         textSize(15);
         textAlign(LEFT, TOP);
-        PFont ubuntuFont = createFont("UbuntuMono-Regular.ttf", 15);
-        textFont(ubuntuFont);
+        ubuntuLogoFont = createFont("UbuntuMono-Regular.ttf", 15);
+        ubuntuConsoleFont = createFont("UbuntuMono-Regular.ttf", 20);
 
         Simulation.p = this;
         simulation = new Simulation();
+        commandManager = new CommandManager();
     }
 
     @Override
@@ -30,14 +44,12 @@ public class Canvas extends PApplet {
         background(180);
 
         showConsole();
+        showLogo();
         showHelp();
         simulation.show(1500, 800, -0.2f, 0.3f);
     }
 
-    private void showConsole(){
-        fill(12, 12 ,12);
-        rect(0, 0, 350, height);
-
+    private void showLogo(){
         fill(204, 204, 204);
         String logo = """
                  ______               __          __    \s
@@ -47,11 +59,47 @@ public class Canvas extends PApplet {
                   ____  ___    / /    ___    / /_       \s
                  / __/ / _ \\  / _ \\  / _ \\  / __/       \s
                 /_/    \\___/ /_.__/  \\___/  \\__/        \s
-                https://twitch.com/boogieman002""";
+                https://twitch.com/boogieman002\n""";
 
-        String consoleLog = logo.concat("");
+        textFont(ubuntuLogoFont);
+        text(logo, 10, 0);
+    }
 
-        text(consoleLog, 10, 0);
+    private void showConsole(){
+        fill(12, 12 ,12);
+        rect(0, 0, 350, height);
+
+        textFont(ubuntuConsoleFont);
+
+        String lastUser = "";
+        int lineYPos = 200;
+        for(UserCommand command:commandManager.getCommandList()){
+
+            String userName;
+            if(command.getUserName().equals(lastUser)){
+                userName = IntStream.range(0, command.getUserName().length()).mapToObj(i -> " ").collect(Collectors.joining());
+                text(userName, 10, lineYPos);
+            } else {
+                lineYPos += ubuntuConsoleFont.getSize()*0.3;
+                fill(22, 198, 12);
+                lastUser = command.getUserName();
+                userName = command.getUserName();
+                text(userName, 10, lineYPos);
+
+                fill(204, 204, 204);
+                text("$ ", 10 + textWidth(userName), lineYPos);
+            }
+
+            String content = command.getContent().concat("\n");
+
+            // rect in case command don't fit in console
+            fill(12, 12 ,12);
+            rect(10 + textWidth(userName) + textWidth("$ "), lineYPos, 10 + textWidth(content), ubuntuConsoleFont.getSize());
+
+            fill(204, 204, 204);
+            text(content, 10 + textWidth(userName) + textWidth("$ "), lineYPos);
+            lineYPos += ubuntuConsoleFont.getSize()*1.2;
+        }
     }
 
     private void showHelp(){
@@ -82,9 +130,9 @@ public class Canvas extends PApplet {
 
         fill(12, 12, 12);
         textSize(30);
-        text("HELP", 1600, 10);
-        textSize(15);
-        text(content, 1600, 50);
+        text("HELP", 1550, 10);
+        textSize(18);
+        text(content, 1550, 50);
     }
 
 }

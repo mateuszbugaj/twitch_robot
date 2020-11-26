@@ -2,14 +2,18 @@ package Managment;
 
 import Utils.IEnvAction;
 import Utils.RobotPoseSubscriber;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import processing.core.PVector;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class CommandManager implements RobotPoseSubscriber {
-    private final IEnvAction<String > sendSerialMessageAction;
+    public static Logger logger = LoggerFactory.getLogger(CommandManager.class);
+    private IEnvAction<String > sendSerialMessageAction;
     private final Queue<UserCommand> commandQueue = new LinkedList<>();
     private Boolean robotWaiting = true;
     public ArrayList<String > robotLogs = new ArrayList<>();
@@ -17,6 +21,17 @@ public class CommandManager implements RobotPoseSubscriber {
 
     public CommandManager(IEnvAction<String> sendSerialMessageAction) {
         this.sendSerialMessageAction = sendSerialMessageAction;
+    }
+
+    public CommandManager() {
+        // Placeholder user commands
+        commandQueue.add(new UserCommand("x10 y10", "user1"));
+        commandQueue.add(new UserCommand("x0", "user1"));
+        commandQueue.add(new UserCommand("y20", "user1"));
+        commandQueue.add(new UserCommand("y0", "ABC123"));
+        commandQueue.add(new UserCommand("x123", "ABC123"));
+        commandQueue.add(new UserCommand("x123 y123 z123", "25_characters_long_name__"));
+        commandQueue.add(new UserCommand("y20", "user1"));
     }
 
     public void saveCommand(UserCommand command){
@@ -34,11 +49,19 @@ public class CommandManager implements RobotPoseSubscriber {
     }
 
     public void sendCommandToRobot(UserCommand command){
-        sendSerialMessageAction.execute(command.getContent());
+        try{
+            sendSerialMessageAction.execute(command.getContent());
+        } catch (NullPointerException e){
+            logger.error(e.getMessage());
+        }
     }
 
     public int getCommandQueueSize(){
         return commandQueue.size();
+    }
+
+    public List<UserCommand> getCommandList(){
+        return new ArrayList<>(commandQueue);
     }
 
     @Override
