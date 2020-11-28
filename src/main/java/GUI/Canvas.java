@@ -2,20 +2,13 @@ package GUI;
 
 import Managment.CommandManager;
 import Managment.UserCommand;
-import Robot.SendSerialMessageAction;
-import Robot.SerialCom;
-import com.fazecast.jSerialComm.SerialPort;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import processing.core.PApplet;
 import processing.core.PFont;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class Canvas extends PApplet {
-    public static Logger log = LoggerFactory.getLogger(Canvas.class);
     private Simulation simulation;
     private CommandManager commandManager;
     private PFont ubuntuLogoFont;

@@ -30,7 +30,7 @@ public class CommandManager implements RobotPoseSubscriber {
         commandQueue.add(new UserCommand("y20", "user1"));
         commandQueue.add(new UserCommand("y0", "ABC123"));
         commandQueue.add(new UserCommand("x123", "ABC123"));
-        commandQueue.add(new UserCommand("x123 y123 z123", "25_characters_long_name__"));
+//        commandQueue.add(new UserCommand("x123 y123 z123", "25_characters_long_name__"));
         commandQueue.add(new UserCommand("y20", "user1"));
     }
 
@@ -44,7 +44,10 @@ public class CommandManager implements RobotPoseSubscriber {
     }
 
     public void saveRobotLog(String log) {
-        robotWaiting = true;
+        if(log.contains("DONE")){
+            robotWaiting = true;
+        }
+
         robotLogs.add(log);
     }
 
