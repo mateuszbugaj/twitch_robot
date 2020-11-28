@@ -29,21 +29,23 @@ public class TwitchChatMessageEventHandler implements Consumer<IRCMessageEvent> 
 
     @Override
     public void accept(IRCMessageEvent ircMessageEvent) {
-        log.info("New message '" + ircMessageEvent.getMessage().get() + "' from " + ircMessageEvent.getUserName());
+        ircMessageEvent.getMessage().ifPresent(message -> { // todo: there might be better to use .getRawMassage()
+            log.info("New message '" + message + "' from " + ircMessageEvent.getUserName());
 
-        String message = ircMessageEvent.getMessage().get(); // todo: there might be better to use .getRawMassage()
-        if(message.startsWith("!")){
-            try {
-                List<UserCommand> userCommands = converter.apply(message)
-                        .stream()
-                        .map(command -> new UserCommand(command, ircMessageEvent.getUserName()))
-                        .collect(Collectors.toList());
+            if(message.startsWith("!")){
+                try {
+                    List<UserCommand> userCommands = converter.apply(message)
+                            .stream()
+                            .map(command -> new UserCommand(command, ircMessageEvent.getUserName()))
+                            .collect(Collectors.toList());
 
-                userCommands.forEach(saveCommandAction::execute);
-            } catch (InvalidUserCommandException e) {
-                log.error(e.getMessage());
-                sendChatMessageAction.execute(e.getMessage());
+                    log.info("Got commands: \n" + userCommands.stream().map(x -> x.toString() + "\n").collect(Collectors.joining()));
+                    userCommands.forEach(saveCommandAction::execute);
+                } catch (InvalidUserCommandException e) {
+                    log.error(e.getMessage());
+                    sendChatMessageAction.execute(e.getMessage());
+                }
             }
-        }
+        });
     }
 }

@@ -1,7 +1,17 @@
 package GUI;
 
 import Managment.CommandManager;
+import Managment.SaveCommandAction;
 import Managment.UserCommand;
+import Robot.SendSerialMessageAction;
+import Robot.SerialCom;
+import Twitch.SendChatMessageAction;
+import Twitch.TwitchChatMessageEventHandler;
+import Twitch.TwitchService;
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
+import com.github.twitch4j.TwitchClient;
+import com.github.twitch4j.TwitchClientBuilder;
+import com.github.twitch4j.chat.events.channel.IRCMessageEvent;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -29,7 +39,30 @@ public class Canvas extends PApplet {
 
         Simulation.p = this;
         simulation = new Simulation();
-        commandManager = new CommandManager();
+
+        SerialCom serialCom = new SerialCom(null);
+        SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
+        commandManager = new CommandManager(serialMessageAction);
+
+        String channelName = System.getenv("TWITCH_CHANNEL");
+        String twitchToken = System.getenv("TWITCH_TOKEN");
+
+        TwitchClient twitchClient = TwitchClientBuilder
+                .builder()
+                .withEnableHelix(true)
+                .withEnableChat(true)
+                .withChatAccount(new OAuth2Credential("boogieman002", twitchToken))
+                .build();
+
+        TwitchService twitchService = new TwitchService(twitchClient, channelName);
+
+        twitchClient.getEventManager().onEvent(IRCMessageEvent.class,
+                new TwitchChatMessageEventHandler(
+                        new SaveCommandAction(commandManager),
+                        new SendChatMessageAction(twitchService))
+        );
+
+
     }
 
     @Override

@@ -17,6 +17,8 @@ public class SerialCom {
             throw new EmptyMessageException("Cannot send empty message to the robot!");
         }
 
-        serialPort.getOutputStream().write(message.getBytes());
+        if(serialPort != null){
+            serialPort.getOutputStream().write(message.getBytes());
+        }
     }
 }
