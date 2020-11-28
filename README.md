@@ -1,3 +1,2 @@
 # twitch_robot
-
-Change 1
+![GUI_demo](https://imgur.com/47CC69A.jpg)
