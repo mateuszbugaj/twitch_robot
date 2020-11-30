@@ -51,7 +51,7 @@ public class Canvas extends PApplet {
                 .builder()
                 .withEnableHelix(true)
                 .withEnableChat(true)
-                .withChatAccount(new OAuth2Credential("boogieman002", twitchToken))
+                .withChatAccount(new OAuth2Credential(System.getenv("TWITCH_CHANNEL"), twitchToken))
                 .build();
 
         TwitchService twitchService = new TwitchService(twitchClient, channelName);
@@ -76,6 +76,19 @@ public class Canvas extends PApplet {
     }
 
     private void showLogo(){
+        String channelURL = "https://twitch.com/" + System.getenv("TWITCH_CHANNEL");
+
+        int k = (frameCount % ((channelURL.length() * 2 + 1) * 10)) /10;
+        if(k > channelURL.length()){
+            channelURL = IntStream.
+                    range(0, k - channelURL.length())
+                    .mapToObj(i -> " ")
+                    .collect(Collectors.joining())
+                    .concat(channelURL.substring(0, channelURL.length()*2 - k));
+        } else {
+            channelURL = channelURL.substring(channelURL.length() - k);
+        }
+
         fill(204, 204, 204);
         String logo = """
                  ______               __          __    \s
@@ -85,7 +98,7 @@ public class Canvas extends PApplet {
                   ____  ___    / /    ___    / /_       \s
                  / __/ / _ \\  / _ \\  / _ \\  / __/       \s
                 /_/    \\___/ /_.__/  \\___/  \\__/        \s
-                https://twitch.com/boogieman002\n""";
+                """ + channelURL + "\n";
 
         textFont(ubuntuLogoFont);
         text(logo, 10, 0);
