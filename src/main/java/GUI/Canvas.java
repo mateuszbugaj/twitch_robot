@@ -44,23 +44,23 @@ public class Canvas extends PApplet {
         SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
         commandManager = new CommandManager(serialMessageAction);
 
-//        String channelName = System.getenv("TWITCH_CHANNEL");
-//        String twitchToken = System.getenv("TWITCH_TOKEN");
-//
-//        TwitchClient twitchClient = TwitchClientBuilder
-//                .builder()
-//                .withEnableHelix(true)
-//                .withEnableChat(true)
-//                .withChatAccount(new OAuth2Credential("boogieman002", twitchToken))
-//                .build();
-//
-//        TwitchService twitchService = new TwitchService(twitchClient, channelName);
-//
-//        twitchClient.getEventManager().onEvent(IRCMessageEvent.class,
-//                new TwitchChatMessageEventHandler(
-//                        new SaveCommandAction(commandManager),
-//                        new SendChatMessageAction(twitchService))
-//        );
+        String channelName = System.getenv("TWITCH_CHANNEL");
+        String twitchToken = System.getenv("TWITCH_TOKEN");
+
+        TwitchClient twitchClient = TwitchClientBuilder
+                .builder()
+                .withEnableHelix(true)
+                .withEnableChat(true)
+                .withChatAccount(new OAuth2Credential(System.getenv("TWITCH_CHANNEL"), twitchToken))
+                .build();
+
+        TwitchService twitchService = new TwitchService(twitchClient, channelName);
+
+        twitchClient.getEventManager().onEvent(IRCMessageEvent.class,
+                new TwitchChatMessageEventHandler(
+                        new SaveCommandAction(commandManager),
+                        new SendChatMessageAction(twitchService))
+        );
 
 
     }
