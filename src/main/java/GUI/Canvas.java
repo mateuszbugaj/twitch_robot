@@ -8,6 +8,7 @@ import Robot.SerialCom;
 import Twitch.SendChatMessageAction;
 import Twitch.TwitchChatMessageEventHandler;
 import Twitch.TwitchService;
+import Utils.FileReader;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
@@ -24,6 +25,7 @@ public class Canvas extends PApplet {
     private PFont ubuntuLogoFont;
     private PFont ubuntuConsoleFont;
 
+    private String helpMessage, logo;
 
     @Override
     public void settings() {
@@ -34,7 +36,7 @@ public class Canvas extends PApplet {
     public void setup() {
         textSize(15);
         textAlign(LEFT, TOP);
-        ubuntuLogoFont = createFont("UbuntuMono-Regular.ttf", 15);
+        ubuntuLogoFont = createFont("UbuntuMono-Regular.ttf", 20);
         ubuntuConsoleFont = createFont("UbuntuMono-Regular.ttf", 20);
 
         Simulation.p = this;
@@ -62,7 +64,8 @@ public class Canvas extends PApplet {
                         new SendChatMessageAction(twitchService))
         );
 
-
+        helpMessage = FileReader.read("src/main/resources/text_files/help.txt");
+        logo = FileReader.read("src/main/resources/text_files/logo.txt");
     }
 
     @Override
@@ -90,18 +93,10 @@ public class Canvas extends PApplet {
         }
 
         fill(204, 204, 204);
-        String logo = """
-                 ______               __          __    \s
-                /_  __/ _    __   _  / /_  ____  / /    \s
-                 / /   | |/|/ / / / / __/ / __/ / _ \\   \s
-                /_/    |__,__/ /_/  \\__/  \\__/_/_//_/   \s
-                  ____  ___    / /    ___    / /_       \s
-                 / __/ / _ \\  / _ \\  / _ \\  / __/       \s
-                /_/    \\___/ /_.__/  \\___/  \\__/        \s
-                """ + channelURL + "\n";
+        String logoWithChannel = logo.concat(channelURL);
 
         textFont(ubuntuLogoFont);
-        text(logo, 10, 0);
+        text(logoWithChannel, 10, 0);
     }
 
     private void showConsole(){
@@ -142,36 +137,11 @@ public class Canvas extends PApplet {
     }
 
     private void showHelp(){
-        String content = """
-                To send command type '!'
-                and one of the following:
-                 x#
-                 y#
-                 z#
-                where # means distance in millimeters
-                (6.21371e-7 mile) on the x/y/z axis.
-                You can combine commands for the axes
-                to move them at the same time.
-                Just separate them with space.
-                You can also combine commands for
-                separate movement using semicolon ';'
-
-                Here are examples:
-                !x10 (moves head 10mm on the x axis)
-                !y-55 (moves -55mm on the y axis)
-                !x15 y15
-                (moves on the diagonal to the x15 y15)
-                !x15; y10
-                (moves first to the x=15, then y=10)
-                There are limitations to the range of
-                motion but you can try to brake them.
-                Have fun.""";
-
         fill(12, 12, 12);
         textSize(30);
         text("HELP", 1550, 10);
         textSize(18);
-        text(content, 1550, 50);
+        text(helpMessage, 1550, 50);
     }
 
 }

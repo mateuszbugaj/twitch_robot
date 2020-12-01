@@ -1,0 +1,23 @@
+To send command type '!'
+and one of the following:
+x#
+y#
+z#
+where # means distance in millimeters
+(6.21371e-7 mile) on the x/y/z axis.
+You can combine commands for the axes
+to move them at the same time.
+Just separate them with space.
+You can also combine commands for
+separate movement using semicolon ';'
+
+Here are examples:
+!x10 (moves head 10mm on the x axis)
+!y-55 (moves -55mm on the y axis)
+!x15 y15
+(moves on the diagonal to the x15 y15)
+!x15; y10
+(moves first to the x=15, then y=10)
+There are limitations to the range of
+motion but you can try to brake them.
+Have fun.
