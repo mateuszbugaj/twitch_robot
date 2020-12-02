@@ -36,33 +36,34 @@ public class Canvas extends PApplet {
     public void setup() {
         textSize(15);
         textAlign(LEFT, TOP);
-        ubuntuLogoFont = createFont("UbuntuMono-Regular.ttf", 20);
+        ubuntuLogoFont = createFont("UbuntuMono-Bold.ttf", 20);
         ubuntuConsoleFont = createFont("UbuntuMono-Regular.ttf", 20);
 
         Simulation.p = this;
         simulation = new Simulation();
+        commandManager = new CommandManager();
 
-        SerialCom serialCom = new SerialCom(null);
-        SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
-        commandManager = new CommandManager(serialMessageAction);
-
-        String channelName = System.getenv("TWITCH_CHANNEL");
-        String twitchToken = System.getenv("TWITCH_TOKEN");
-
-        TwitchClient twitchClient = TwitchClientBuilder
-                .builder()
-                .withEnableHelix(true)
-                .withEnableChat(true)
-                .withChatAccount(new OAuth2Credential(System.getenv("TWITCH_CHANNEL"), twitchToken))
-                .build();
-
-        TwitchService twitchService = new TwitchService(twitchClient, channelName);
-
-        twitchClient.getEventManager().onEvent(IRCMessageEvent.class,
-                new TwitchChatMessageEventHandler(
-                        new SaveCommandAction(commandManager),
-                        new SendChatMessageAction(twitchService))
-        );
+//        SerialCom serialCom = new SerialCom(null);
+//        SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
+//        commandManager = new CommandManager(serialMessageAction);
+//
+//        String channelName = System.getenv("TWITCH_CHANNEL");
+//        String twitchToken = System.getenv("TWITCH_TOKEN");
+//
+//        TwitchClient twitchClient = TwitchClientBuilder
+//                .builder()
+//                .withEnableHelix(true)
+//                .withEnableChat(true)
+//                .withChatAccount(new OAuth2Credential(System.getenv("TWITCH_CHANNEL"), twitchToken))
+//                .build();
+//
+//        TwitchService twitchService = new TwitchService(twitchClient, channelName);
+//
+//        twitchClient.getEventManager().onEvent(IRCMessageEvent.class,
+//                new TwitchChatMessageEventHandler(
+//                        new SaveCommandAction(commandManager),
+//                        new SendChatMessageAction(twitchService))
+//        );
 
         helpMessage = FileReader.read("src/main/resources/text_files/help.txt");
         logo = FileReader.read("src/main/resources/text_files/logo.txt");
@@ -70,7 +71,7 @@ public class Canvas extends PApplet {
 
     @Override
     public void draw() {
-        background(180);
+        background(177, 157, 216);
 
         showConsole();
         showLogo();
@@ -79,7 +80,14 @@ public class Canvas extends PApplet {
     }
 
     private void showLogo(){
-        String channelURL = "https://twitch.com/" + System.getenv("TWITCH_CHANNEL");
+        String channelURL = "twitch.com/" + System.getenv("TWITCH_CHANNEL");
+
+        // add specific number of white signs to channelURL to utilize whole console width
+        int numberOfSpacesToConcat = (int) ((350 - textWidth(channelURL)) / textWidth(" ")) - 1;
+        channelURL = (IntStream
+                .range(0, numberOfSpacesToConcat)
+                .mapToObj(i -> " ")
+                .collect(Collectors.joining())).concat(channelURL);
 
         int k = (frameCount % ((channelURL.length() * 2 + 1) * 10)) /10;
         if(k > channelURL.length()){
@@ -92,7 +100,7 @@ public class Canvas extends PApplet {
             channelURL = channelURL.substring(channelURL.length() - k);
         }
 
-        fill(204, 204, 204);
+        fill(100, 65, 164);
         String logoWithChannel = logo.concat(channelURL);
 
         textFont(ubuntuLogoFont);
@@ -106,12 +114,18 @@ public class Canvas extends PApplet {
         textFont(ubuntuConsoleFont);
 
         String lastUser = "";
-        int lineYPos = 200;
+        int lineYPos = 270;
         for(UserCommand command:commandManager.getCommandList()){
 
             String userName;
             if(command.getUserName().equals(lastUser)){
-                userName = IntStream.range(0, command.getUserName().length()).mapToObj(i -> " ").collect(Collectors.joining());
+
+                // add specific number of white signs to indent
+                userName = IntStream
+                        .range(0, command.getUserName().length())
+                        .mapToObj(i -> " ")
+                        .collect(Collectors.joining());
+
                 text(userName, 10, lineYPos);
             } else {
                 lineYPos += ubuntuConsoleFont.getSize()*0.3;
@@ -128,7 +142,10 @@ public class Canvas extends PApplet {
 
             // rect in case command don't fit in console
             fill(12, 12 ,12);
-            rect(10 + textWidth(userName) + textWidth("$ "), lineYPos, 10 + textWidth(content), ubuntuConsoleFont.getSize());
+            rect(10 + textWidth(userName) + textWidth("$ "),
+                    lineYPos,
+                    10 + textWidth(content),
+                    ubuntuConsoleFont.getSize());
 
             fill(204, 204, 204);
             text(content, 10 + textWidth(userName) + textWidth("$ "), lineYPos);
