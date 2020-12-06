@@ -1,23 +1,14 @@
 package GUI;
 
 import Managment.CommandManager;
-import Managment.SaveCommandAction;
 import Managment.UserCommand;
-import Robot.SendSerialMessageAction;
-import Robot.SerialCom;
-import Twitch.SendChatMessageAction;
-import Twitch.TwitchChatMessageEventHandler;
-import Twitch.TwitchService;
 import Utils.FileReader;
-import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
-import com.github.twitch4j.TwitchClient;
-import com.github.twitch4j.TwitchClientBuilder;
-import com.github.twitch4j.chat.events.channel.IRCMessageEvent;
 import processing.core.PApplet;
 import processing.core.PFont;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import static Utils.DisableAccessWarnings.disableAccessWarnings;
 
 public class Canvas extends PApplet {
     private Simulation simulation;
@@ -30,6 +21,7 @@ public class Canvas extends PApplet {
     @Override
     public void settings() {
         fullScreen(P3D);
+        disableAccessWarnings();
     }
 
     @Override
