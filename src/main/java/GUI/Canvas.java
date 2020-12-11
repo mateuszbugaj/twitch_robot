@@ -146,11 +146,11 @@ public class Canvas extends PApplet {
     }
 
     private void showHelp(){
-        fill(12, 12, 12);
+        fill(204, 204, 204);
         textSize(30);
-        text("HELP", 1550, 10);
+        text("HELP", 10, 600);
         textSize(18);
-        text(helpMessage, 1550, 50);
+        text(helpMessage, 10, 650);
     }
 
 }
