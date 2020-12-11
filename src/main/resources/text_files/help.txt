@@ -5,6 +5,7 @@ y#
 z#
 where # means distance in millimeters
 (6.21371e-7 mile) on the x/y/z axis.
+
 You can combine commands for the axes
 to move them at the same time.
 Just separate them with space.
@@ -18,6 +19,7 @@ Here are examples:
 (moves on the diagonal to the x15 y15)
 !x15; y10
 (moves first to the x=15, then y=10)
+
 There are limitations to the range of
 motion but you can try to brake them.
 Have fun.
