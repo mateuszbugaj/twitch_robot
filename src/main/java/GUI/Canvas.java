@@ -13,23 +13,33 @@ import static Utils.DisableAccessWarnings.disableAccessWarnings;
 public class Canvas extends PApplet {
     private Simulation simulation;
     private CommandManager commandManager;
-    private PFont ubuntuLogoFont;
-    private PFont ubuntuConsoleFont;
-
     private String helpMessage, logo;
+    private Window helpWindow;
 
     @Override
     public void settings() {
         fullScreen(P3D);
+//        size(1920, 1080, P3D);
         disableAccessWarnings();
     }
 
     @Override
     public void setup() {
-        textSize(15);
         textAlign(LEFT, TOP);
-        ubuntuLogoFont = createFont("UbuntuMono-Bold.ttf", 20);
-        ubuntuConsoleFont = createFont("UbuntuMono-Regular.ttf", 20);
+        GUIConfig.consoleFont = createFont("UbuntuMono-Regular.ttf", 20);
+        GUIConfig.logoFont = createFont("UbuntuMono-Bold.ttf", 20);
+
+        helpMessage = FileReader.read("src/main/resources/text_files/help.txt");
+        logo = FileReader.read("src/main/resources/text_files/logo.txt");
+
+        Window.p = this;
+        helpWindow = new Window(
+                1400,
+                100,
+                400,
+                200,
+                "HELP")
+                .setContent(helpMessage, true);
 
         Simulation.p = this;
         simulation = new Simulation();
@@ -56,9 +66,6 @@ public class Canvas extends PApplet {
 //                        new SaveCommandAction(commandManager),
 //                        new SendChatMessageAction(twitchService))
 //        );
-
-        helpMessage = FileReader.read("src/main/resources/text_files/help.txt");
-        logo = FileReader.read("src/main/resources/text_files/logo.txt");
     }
 
     @Override
@@ -67,9 +74,8 @@ public class Canvas extends PApplet {
 
         showConsole();
         showLogo();
-        showHelp();
         simulation.show(1500, 800, -0.2f, 0.3f);
-        showWindow(1500, 100, 300, 200, "Window name", "Content");
+        helpWindow.show();
     }
 
     private void showLogo(){
@@ -93,18 +99,18 @@ public class Canvas extends PApplet {
             channelURL = channelURL.substring(channelURL.length() - k);
         }
 
-        fill(100, 65, 164);
+        fill(GUIConfig.twitchDarkPurple);
         String logoWithChannel = logo.concat(channelURL);
 
-        textFont(ubuntuLogoFont);
+        textFont(GUIConfig.logoFont);
         text(logoWithChannel, 10, 0);
     }
 
     private void showConsole(){
-        fill(12, 12 ,12);
+        fill(GUIConfig.ubuntuBlack);
         rect(0, 0, 350, height);
 
-        textFont(ubuntuConsoleFont);
+        textFont(GUIConfig.consoleFont);
 
         String lastUser = "";
         int lineYPos = 270;
@@ -121,54 +127,29 @@ public class Canvas extends PApplet {
 
                 text(userName, 10, lineYPos);
             } else {
-                lineYPos += ubuntuConsoleFont.getSize()*0.3;
-                fill(22, 198, 12);
+                lineYPos += GUIConfig.consoleFont.getSize()*0.3;
+                fill(GUIConfig.ubuntuGreen);
                 lastUser = command.getUserName();
                 userName = command.getUserName();
                 text(userName, 10, lineYPos);
 
-                fill(204, 204, 204);
+                fill(GUIConfig.ubuntuWhite);
                 text("$ ", 10 + textWidth(userName), lineYPos);
             }
 
             String content = command.getContent().concat("\n");
 
             // rect in case command don't fit in console
-            fill(12, 12 ,12);
+            fill(GUIConfig.ubuntuBlack);
             rect(10 + textWidth(userName) + textWidth("$ "),
                     lineYPos,
                     10 + textWidth(content),
-                    ubuntuConsoleFont.getSize());
+                    GUIConfig.consoleFont.getSize());
 
-            fill(204, 204, 204);
+            fill(GUIConfig.ubuntuWhite);
             text(content, 10 + textWidth(userName) + textWidth("$ "), lineYPos);
-            lineYPos += ubuntuConsoleFont.getSize()*1.2;
+            lineYPos += GUIConfig.consoleFont.getSize()*1.2;
         }
-    }
-
-    private void showWindow(int x, int y, int w, int h, String name, String content){
-        pushMatrix();
-        translate(x, y);
-
-        fill(100, 65, 164);
-        rect(-5, -30, w + 5*2, h + 30 + 5);
-
-        fill(12, 12, 12);
-        textSize(30);
-        text("HELP", 10, -30);
-
-        fill(12, 12, 12);
-        rect(0, 0, w, h);
-
-        popMatrix();
-    }
-
-    private void showHelp(){
-        fill(204, 204, 204);
-        textSize(30);
-        text("HELP", 10, 850);
-        textSize(18);
-        text(helpMessage, 10, 900);
     }
 
 }
