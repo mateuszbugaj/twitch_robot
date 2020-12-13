@@ -69,6 +69,7 @@ public class Canvas extends PApplet {
         showLogo();
         showHelp();
         simulation.show(1500, 800, -0.2f, 0.3f);
+        showWindow(1500, 100, 300, 200, "Window name", "Content");
     }
 
     private void showLogo(){
@@ -145,6 +146,22 @@ public class Canvas extends PApplet {
         }
     }
 
+    private void showWindow(int x, int y, int w, int h, String name, String content){
+        pushMatrix();
+        translate(x, y);
+
+        fill(100, 65, 164);
+        rect(-5, -30, w + 5*2, h + 30 + 5);
+
+        fill(12, 12, 12);
+        textSize(30);
+        text("HELP", 10, -30);
+
+        fill(12, 12, 12);
+        rect(0, 0, w, h);
+
+        popMatrix();
+    }
 
     private void showHelp(){
         fill(204, 204, 204);
