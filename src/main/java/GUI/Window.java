@@ -1,6 +1,5 @@
 package GUI;
 
-import org.jetbrains.annotations.NotNull;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ public class Window {
     public static PApplet p;
     private final int xPos, yPos, windowWidth, windowHeight;
     private final String name;
+    private final float slideTime = 300;
     private List<String > contents = new ArrayList<>();
 
     public Window(int xPos, int yPos, int windowWidth, int windowHeight, String name) {
@@ -60,7 +60,7 @@ public class Window {
 
         // Window Frame
         p.fill(GUIConfig.twitchDarkPurple);
-        p.rect(-5, -30, windowWidth + 5*2, windowHeight + 30 + 5, 10);
+        p.rect(-5, -30, windowWidth + 5*2, windowHeight + 30 + 5 + 15, 10);
 
         // Window name
         p.fill(GUIConfig.ubuntuBlack);
@@ -70,19 +70,19 @@ public class Window {
 
         // Content space
         p.fill(GUIConfig.ubuntuBlack);
-        p.rect(0, 0, windowWidth, windowHeight, 0, 0, 10, 10);
+        p.rect(0, 0, windowWidth, windowHeight + 15, 0, 0, 10, 10);
 
         // Content text
         if(!contents.isEmpty()){
-            int k = (p.frameCount/300) % contents.size();
+            int k = (int) (p.frameCount/slideTime) % contents.size();
 
             // Slide number
             if(contents.size() > 1){
                 p.fill(GUIConfig.ubuntuBlack);
                 p.textFont(GUIConfig.logoFont);
-                p.textSize(30);
+                p.textSize(25);
                 String slideNumberText = k+1 + "/" + contents.size();
-                p.text(slideNumberText, windowWidth - p.textWidth(slideNumberText) - 10, -30);
+                p.text(slideNumberText, windowWidth - p.textWidth(slideNumberText) - 10, -28);
             }
 
             p.fill(GUIConfig.ubuntuWhite);
@@ -90,6 +90,10 @@ public class Window {
             p.textSize(20);
             p.text(contents.get(k), 10, 10);
 
+            // progress bar
+            p.fill(GUIConfig.twitchLightPurple);
+            float progress = (p.frameCount%slideTime) / slideTime;
+            p.rect(5, windowHeight, progress * (windowWidth - 10), 10, 5);
         }
 
         p.popMatrix();
