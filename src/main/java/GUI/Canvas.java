@@ -38,8 +38,8 @@ public class Canvas extends PApplet {
                 100,
                 400,
                 200,
-                "HELP")
-                .setContent(helpMessage, true);
+                "HELP");
+        helpWindow.setContent(helpMessage);
 
         Simulation.p = this;
         simulation = new Simulation();
