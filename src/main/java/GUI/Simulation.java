@@ -19,10 +19,10 @@ public class Simulation implements RobotPoseSubscriber {
         yAxis = p.loadShape("3d_models/yAxis.obj");
         zAxis = p.loadShape("3d_models/zAxis.obj");
 
-        base.setFill(p.color(133, 168, 50));
-        xAxis.setFill(p.color(50, 156, 168));
-        yAxis.setFill(p.color(217, 201, 26));
-        zAxis.setFill(p.color(217, 80, 26));
+        base.setFill(GUIConfig.simulationBaseColor);
+        xAxis.setFill(GUIConfig.simulationXAxisColor);
+        yAxis.setFill(GUIConfig.simulationYAxisColor);
+        zAxis.setFill(GUIConfig.simulationZAxisColor);
 
         robotPose = new PVector(0, 0, 0);
     }
