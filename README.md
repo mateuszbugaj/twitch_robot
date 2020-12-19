@@ -12,7 +12,7 @@ via a channel's chat using basic commands. These commands are displayed in comma
 BASH. There are windows for displaying instructions and tips, programmed path and real time simulation of  the robot
 updated using messages from the actual robot which is equipped with a web cam to allow users see results.
 <br>
-It's written mostly using the TDD approach using mockito and junit for testing. 
+It's build with maven following the TDD approach using mockito and junit for testing.
 ![GUI_demo](https://imgur.com/mSnVwVw.jpg)
 
 ## Technologies <a name="technologies"></a>
@@ -21,6 +21,7 @@ It's written mostly using the TDD approach using mockito and junit for testing.
 - twitch4j
 - jSerialComm
 - mockito / junit
+- Maven
 
 ## Options <a name="options"></a>
 
