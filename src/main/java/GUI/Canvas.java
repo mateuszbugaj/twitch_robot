@@ -5,6 +5,7 @@ import Managment.UserCommand;
 import Utils.FileReader;
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PVector;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -73,6 +74,7 @@ public class Canvas extends PApplet {
         background(177, 157, 216);
 
         showConsole();
+        showPointPosition(commandManager.currentPose);
         showLogo();
         simulation.show(1500, 800, -0.2f, 0.3f);
         helpWindow.show();
@@ -106,6 +108,32 @@ public class Canvas extends PApplet {
         text(logoWithChannel, 10, 0);
     }
 
+    private void showPointPosition(PVector pos){
+        String root = "root";
+        String posPrefix = "point-pos";
+        String posStr = String.format("[%.0f, %.0f, %.0f]", pos.x, pos.y, pos.z);
+        int lineYPos = 270;
+
+        fill(GUIConfig.ubuntuGreen);
+        text(root, 10, lineYPos);
+
+        fill(GUIConfig.ubuntuWhite);
+        text(":", 10 + textWidth(root), lineYPos);
+
+        fill(GUIConfig.simulationBaseColor);
+        text(posPrefix, 10 + textWidth(root) + textWidth(":"), lineYPos);
+
+        fill(GUIConfig.ubuntuWhite);
+        text("$ " + posStr, 10 + textWidth(root) + textWidth(":") + textWidth(posPrefix), lineYPos);
+
+        // draw line underneath
+        stroke(GUIConfig.ubuntuWhite);
+        line(20,
+                lineYPos + GUIConfig.consoleFont.getSize() + 10,
+                330,
+                lineYPos + GUIConfig.consoleFont.getSize() + 10);
+    }
+
     private void showConsole(){
         fill(GUIConfig.ubuntuBlack);
         rect(0, 0, 350, height);
@@ -113,8 +141,15 @@ public class Canvas extends PApplet {
         textFont(GUIConfig.consoleFont);
 
         String lastUser = "";
-        int lineYPos = 270;
-        for(UserCommand command:commandManager.getCommandList()){
+        int lineYPos = 300;
+        for(int commandIndex = 0; commandIndex < commandManager.getCommandList().size(); commandIndex++){
+            UserCommand command = commandManager.getCommandList().get(commandIndex);
+            if (lineYPos > height - 100){
+                fill(GUIConfig.ubuntuWhite);
+                text(String.format("And more... (%d)", commandManager.getCommandList().size() - commandIndex), 10, lineYPos);
+
+                break;
+            }
 
             String userName;
             if(command.getUserName().equals(lastUser)){
@@ -149,7 +184,12 @@ public class Canvas extends PApplet {
             fill(GUIConfig.ubuntuWhite);
             text(content, 10 + textWidth(userName) + textWidth("$ "), lineYPos);
             lineYPos += GUIConfig.consoleFont.getSize()*1.2;
+
         }
+    }
+
+    public void showChat(){
+
     }
 
 }

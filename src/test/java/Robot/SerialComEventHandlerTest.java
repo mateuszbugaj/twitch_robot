@@ -5,8 +5,8 @@ import Managment.SaveRobotLogAction;
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -14,7 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-class SerialComEventHandlerTest {
+public class SerialComEventHandlerTest {
 
     SerialPortEvent mockedSerialPortEvent;
     SerialPort mockedSerialPort;
@@ -22,8 +22,8 @@ class SerialComEventHandlerTest {
     SerialComEventHandler serialComEventHandler;
     CommandManager commandManager;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         mockedSerialPort = mock(SerialPort.class);
         mockedSerialPortEvent = mock(SerialPortEvent.class);
 
@@ -35,7 +35,7 @@ class SerialComEventHandlerTest {
     }
 
     @Test
-    void receiveSerialMessage() {
+    public void receiveSerialMessage() {
         // Given
         String message = "x10 y5 z20" + (char) 10;
         doReturn(message).when(serialComEventHandler).getBuffer(mockedSerialPort);
@@ -49,7 +49,7 @@ class SerialComEventHandlerTest {
     }
 
     @Test
-    void poseSubscriptionTest(){
+    public void poseSubscriptionTest(){
         // Given
         String message = "x10 y5 z20" + (char) 10;
         Float[] expected = new Float[]{10f, 5f, 20f};

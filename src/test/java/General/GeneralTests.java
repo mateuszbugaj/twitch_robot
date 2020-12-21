@@ -12,7 +12,6 @@ public class GeneralTests{
 
     @Before
     public void before(){
-
     }
 
     @Test

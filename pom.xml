@@ -9,9 +9,9 @@
     <version>1.0</version>
 
     <properties>
-        <java.version>1.14</java.version>
-        <maven.compiler.source>1.14</maven.compiler.source>
-        <maven.compiler.target>1.14</maven.compiler.target>
+        <java.version>14</java.version>
+        <maven.compiler.source>14</maven.compiler.source>
+        <maven.compiler.target>14</maven.compiler.target>
     </properties>
 
     <repositories>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>org.processing</groupId>
             <artifactId>core</artifactId>
-            <version>3.3.6</version>
+            <version>3.3.7</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.jogamp.jogl/jogl-all-main -->

@@ -25,13 +25,16 @@ public class CommandManager implements RobotPoseSubscriber {
 
     public CommandManager() {
         // Placeholder user commands
-        commandQueue.add(new UserCommand("x10 y10", "user1"));
-        commandQueue.add(new UserCommand("x0", "user1"));
-        commandQueue.add(new UserCommand("y20", "user1"));
-        commandQueue.add(new UserCommand("y0", "ABC123"));
-        commandQueue.add(new UserCommand("x123", "ABC123"));
 //        commandQueue.add(new UserCommand("x123 y123 z123", "25_characters_long_name__"));
-        commandQueue.add(new UserCommand("y20", "user1"));
+
+        for (int i = 0; i < 10; i++) {
+            commandQueue.add(new UserCommand("y20", "user1"));
+            commandQueue.add(new UserCommand("x55", "user1"));
+            commandQueue.add(new UserCommand("x0 y0", "user1"));
+            commandQueue.add(new UserCommand("y70", "user2"));
+            commandQueue.add(new UserCommand("x300", "user2"));
+            commandQueue.add(new UserCommand("x0 y0", "user3"));
+        }
     }
 
     public void saveCommand(UserCommand command){
