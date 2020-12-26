@@ -33,7 +33,6 @@ you need to add some local dependencies. Go into root directory and run:
 mvn install:install-file -Dfile=lib/processing-core.jar -DgroupId=org.processing -DartifactId=core -Dversion=3.7.7 -Dpackaging=jar
 mvn install:install-file -Dfile=lib/video.jar -DgroupId=org.processing -DartifactId=video -Dversion=3.7.7 -Dpackaging=jar
 mvn install:install-file -Dfile=lib/gst1-java-core-1.2.0.jar -DgroupId=org.freedesktop -DartifactId=gstreamer -Dversion=1.0 -Dpackaging=jar
-mvn install:install-file -Dfile=lib/jna.jar -DgroupId=com.sun.jna -DartifactId=jna -Dversion=1.0 -Dpackaging=jar
 mvn install:install-file -Dfile=lib/jna.jar -DgroupId=org.sun -DartifactId=jna -Dversion=1.0 -Dpackaging=jar
 ```
 
