@@ -44,6 +44,6 @@ public class TwitchRobot{
             }
         }
 
-//        PApplet.main(Canvas.class);
+        PApplet.main(Canvas.class);
     }
 }
