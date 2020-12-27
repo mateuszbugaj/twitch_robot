@@ -16,6 +16,7 @@ public class Canvas extends PApplet {
     private CommandManager commandManager;
     private String helpMessage, logo;
     private Window helpWindow;
+    private Camera webcam;
 
     @Override
     public void settings() {
@@ -35,18 +36,23 @@ public class Canvas extends PApplet {
 
         Window.p = this;
         helpWindow = new Window(
-                1400,
-                100,
+                1500,
+                150,
                 400,
                 200,
                 "HELP");
+
         helpWindow.setContent(helpMessage);
 
         Simulation.p = this;
         simulation = new Simulation();
+
+        Camera.p = this;
+        webcam = new Camera(370, 40, (int) (640 * 2),(int) (480 * 2));
+
         commandManager = new CommandManager();
 
-//        SerialCom serialCom = new SerialCom(null);
+//        SerialCom serialCom = new SerialCom(GUIConfig.serialPort);
 //        SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
 //        commandManager = new CommandManager(serialMessageAction);
 //
@@ -76,6 +82,7 @@ public class Canvas extends PApplet {
         showConsole();
         showPointPosition(commandManager.currentPose);
         showLogo();
+        webcam.show();
         simulation.show(1500, 800, -0.2f, 0.3f);
         helpWindow.show();
     }

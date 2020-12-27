@@ -25,6 +25,20 @@ It's build with maven following the TDD approach using mockito and junit for tes
 
 ## Options <a name="options"></a>
 
+- Choose WebCam device and COM port
+```
+Available webcam devices: 
+Press enter to omit.
+(0) HP Webcam
+Type number of choice: 
+
+Available serial ports: 
+No option to choose from.
+```
+- Input commends directly (without Twitch chat)
+- Ban users from inputting commands
+- Grand individual control over the robot for certain time
+
 ## Launch <a name="launch"></a>
 Tested with AdoptOpenJDK 11 (There might be an error running on other java distributions) <br>
 Because there is no official maven repositories for some of graphical libraries, in order to launch this project
@@ -39,12 +53,12 @@ mvn install:install-file -Dfile=lib/jna.jar -DgroupId=org.sun -DartifactId=jna -
 Other dependencies should be downloaded and added automatically. To start project run:
 ```
 mvn clean package
-java -cp target/twitch_robot-1.0.jar TwitchRobot
+java -jar target/twitch_robot-1.0.jar
 ```
 
 Expected output: 
 ```
-.../twitch_robot$ java -cp target/twitch_robot-1.0.jar TwitchRobot
+.../twitch_robot$ java -jar target/twitch_robot-1.0.jar
   ______           __       __
  /_  __/      __ _/ /______/ /_
   / / | | /| / / / __/ ___/ __ \

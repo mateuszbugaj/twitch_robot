@@ -32,10 +32,10 @@ public class Simulation implements RobotPoseSubscriber {
         p.ambientLight(50, 50, 50);
 
         p.pushMatrix();
-        p.translate(x, y, 0);
+        p.translate(x, y, 200);
         p.rotateX(p.PI + rotX);
         p.rotateY(-rotY);
-        p.scale(0.8f);
+        p.scale(0.6f);
 
         // base
         p.pushMatrix();
