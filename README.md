@@ -13,7 +13,7 @@ BASH. There are windows for displaying instructions and tips, programmed path an
 updated using messages from the actual robot which is equipped with a web cam to allow users see results.
 <br>
 It's build with maven following the TDD approach using mockito and junit for testing.
-![GUI_demo](https://imgur.com/mSnVwVw.jpg)
+![GUI_demo](https://imgur.com/fAMnI8x.jpg)
 
 ## Technologies <a name="technologies"></a>
 - Java 11
