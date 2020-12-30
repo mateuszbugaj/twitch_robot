@@ -17,6 +17,7 @@ public class CommandManager implements RobotPoseSubscriber {
     private Boolean robotWaiting = true;
     public ArrayList<String > robotLogs = new ArrayList<>();
     public PVector currentPose = new PVector();
+    public UserCommand currentlyExecuting = null;
 
     public CommandManager(IEnvAction<String> sendSerialMessageAction) {
         this.sendSerialMessageAction = sendSerialMessageAction;
@@ -26,7 +27,7 @@ public class CommandManager implements RobotPoseSubscriber {
         // Placeholder user commands
 //        commandQueue.add(new UserCommand("x123 y123 z123", "25_characters_long_name__"));
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             commandQueue.add(new UserCommand("y20", "user1"));
             commandQueue.add(new UserCommand("x55", "user1"));
             commandQueue.add(new UserCommand("x0 y0", "user1"));
@@ -35,7 +36,6 @@ public class CommandManager implements RobotPoseSubscriber {
             commandQueue.add(new UserCommand("x0 y0", "user3"));
         }
 
-        robotWaiting = false;
     }
 
     public void saveCommand(UserCommand command, boolean saveAsFirst){
@@ -66,6 +66,7 @@ public class CommandManager implements RobotPoseSubscriber {
     public void saveRobotLog(String log) {
         if(log.contains("DONE")){
             robotWaiting = true;
+            currentlyExecuting = null;
         }
 
         robotLogs.add(log);
@@ -73,6 +74,7 @@ public class CommandManager implements RobotPoseSubscriber {
 
     public void sendCommandToRobot(UserCommand command){
         try{
+            currentlyExecuting = command; // todo: this should execute after sending serial msg action if there is no error
             sendSerialMessageAction.execute(command.getContent());
         } catch (NullPointerException e){
             logger.error(e.getMessage());

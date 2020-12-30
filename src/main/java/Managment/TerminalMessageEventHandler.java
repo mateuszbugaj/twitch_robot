@@ -41,7 +41,7 @@ public class TerminalMessageEventHandler implements Runnable{
     public void robotCommand(String line){
         try {
             List<UserCommand> userCommands = commandsParser
-                    .apply(lastLine)
+                    .apply(line)
                     .stream()
                     .map(command -> new UserCommand(command, "root"))
                     .collect(Collectors.toList());

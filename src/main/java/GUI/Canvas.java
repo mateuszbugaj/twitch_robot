@@ -88,7 +88,6 @@ public class Canvas extends PApplet {
         background(177, 157, 216);
 
         showConsole();
-        showPointPosition(commandManager.currentPose);
         showLogo();
         webcam.show();
         simulation.show(1500, 800, -0.2f, 0.3f);
@@ -123,11 +122,8 @@ public class Canvas extends PApplet {
         text(logoWithChannel, 10, 0);
     }
 
-    private void showPointPosition(PVector pos){
+    private int rootInfo(String infoName, int lineYPos, String content){
         String root = "root";
-        String posPrefix = "point-pos";
-        String posStr = String.format("[%.0f, %.0f, %.0f]", pos.x, pos.y, pos.z);
-        int lineYPos = 270;
 
         fill(GUIConfig.ubuntuGreen);
         text(root, 10, lineYPos);
@@ -136,17 +132,12 @@ public class Canvas extends PApplet {
         text(":", 10 + textWidth(root), lineYPos);
 
         fill(GUIConfig.simulationBaseColor);
-        text(posPrefix, 10 + textWidth(root) + textWidth(":"), lineYPos);
+        text(infoName, 10 + textWidth(root) + textWidth(":"), lineYPos);
 
         fill(GUIConfig.ubuntuWhite);
-        text("$ " + posStr, 10 + textWidth(root) + textWidth(":") + textWidth(posPrefix), lineYPos);
+        text("$ " + content, 10 + textWidth(root) + textWidth(":") + textWidth(infoName), lineYPos);
 
-        // draw line underneath
-        stroke(GUIConfig.ubuntuWhite);
-        line(20,
-                lineYPos + GUIConfig.consoleFont.getSize() + 10,
-                330,
-                lineYPos + GUIConfig.consoleFont.getSize() + 10);
+        return (int)(lineYPos + GUIConfig.consoleFont.getSize() * 1.2);
     }
 
     private void showConsole(){
@@ -155,8 +146,30 @@ public class Canvas extends PApplet {
 
         textFont(GUIConfig.consoleFont);
 
+        int lineYPos = 270;
+        lineYPos = rootInfo(
+                "point-pos",
+                lineYPos,
+                String.format("[%.0f, %.0f, %.0f]",
+                        commandManager.currentPose.x,
+                        commandManager.currentPose.y,
+                        commandManager.currentPose.z));
+
+        if (commandManager.currentlyExecuting != null){
+            lineYPos = rootInfo("now-exe", lineYPos, commandManager.currentlyExecuting.getContent());
+        } else {
+            lineYPos = rootInfo("now-exe", lineYPos, "None");
+        }
+
+        // draw line underneath
+        stroke(GUIConfig.ubuntuWhite);
+        line(20,
+                lineYPos + 5,
+                330,
+                lineYPos + 5);
+
+        noStroke();
         String lastUser = "";
-        int lineYPos = 300;
         for(int commandIndex = 0; commandIndex < commandManager.getCommandList().size(); commandIndex++){
             UserCommand command = commandManager.getCommandList().get(commandIndex);
             if (lineYPos > height - 100){
