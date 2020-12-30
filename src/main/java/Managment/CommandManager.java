@@ -9,12 +9,11 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 public class CommandManager implements RobotPoseSubscriber {
     public static Logger logger = LoggerFactory.getLogger(CommandManager.class);
     private IEnvAction<String > sendSerialMessageAction;
-    private final Queue<UserCommand> commandQueue = new LinkedList<>();
+    private final LinkedList<UserCommand> commandQueue = new LinkedList<>();
     private Boolean robotWaiting = true;
     public ArrayList<String > robotLogs = new ArrayList<>();
     public PVector currentPose = new PVector();
@@ -35,15 +34,33 @@ public class CommandManager implements RobotPoseSubscriber {
             commandQueue.add(new UserCommand("x300", "user2"));
             commandQueue.add(new UserCommand("x0 y0", "user3"));
         }
+
+        robotWaiting = false;
     }
 
-    public void saveCommand(UserCommand command){
+    public void saveCommand(UserCommand command, boolean saveAsFirst){
         if(robotWaiting){
             sendCommandToRobot(command);
             robotWaiting = false;
-        } else {
-            commandQueue.add(command);
+            return;
         }
+
+        if (saveAsFirst){
+            if (commandQueue.size() > 0 && commandQueue.peek().getUserName().equals(command.getUserName())){
+                int userCommands = (int) commandQueue
+                        .stream()
+                        .filter(i -> i.getUserName().equals(command.getUserName()))
+                        .count();
+
+                commandQueue.add(userCommands, command);
+                return;
+            }
+
+            commandQueue.addFirst(command);
+            return;
+        }
+
+        commandQueue.add(command);
     }
 
     public void saveRobotLog(String log) {

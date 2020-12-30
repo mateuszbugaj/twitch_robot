@@ -1,10 +1,13 @@
 package GUI;
 
 import Managment.CommandManager;
+import Managment.SaveCommandAction;
+import Managment.TerminalMessageEventHandler;
 import Managment.UserCommand;
+import Robot.SendSerialMessageAction;
+import Robot.SerialCom;
 import Utils.FileReader;
 import processing.core.PApplet;
-import processing.core.PFont;
 import processing.core.PVector;
 
 import java.util.stream.Collectors;
@@ -50,15 +53,20 @@ public class Canvas extends PApplet {
         Camera.p = this;
         webcam = new Camera(370, 40, (int) (640 * 2),(int) (480 * 2));
 
+        SerialCom serialCom = new SerialCom(GUIConfig.serialPort);
+        SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
         commandManager = new CommandManager();
 
-//        SerialCom serialCom = new SerialCom(GUIConfig.serialPort);
-//        SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
-//        commandManager = new CommandManager(serialMessageAction);
-//
-//        String channelName = System.getenv("TWITCH_CHANNEL");
-//        String twitchToken = System.getenv("TWITCH_TOKEN");
-//
+        TerminalMessageEventHandler terminalHandler = new TerminalMessageEventHandler(System.in,
+                new SaveCommandAction(commandManager).setSaveAsFirst(true)
+        );
+
+        Thread terminalThread = new Thread(terminalHandler);
+        terminalThread.start();
+
+        String channelName = System.getenv("TWITCH_CHANNEL");
+        String twitchToken = System.getenv("TWITCH_TOKEN");
+
 //        TwitchClient twitchClient = TwitchClientBuilder
 //                .builder()
 //                .withEnableHelix(true)
