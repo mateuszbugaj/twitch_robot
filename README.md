@@ -35,7 +35,20 @@ Type number of choice:
 Available serial ports: 
 No option to choose from.
 ```
-- Input commends directly (without Twitch chat)
+- Input commends directly (without Twitch chat)<br>
+These commands will always appear at the top of the queue, but not before each other.
+```
+Type in admin commands: 
+!x10; y20
+!x30 z10
+```
+Output (at top):
+```
+root: x10
+      y20
+      x30 z10
+```
+
 - Ban users from inputting commands
 - Grand individual control over the robot for certain time
 
