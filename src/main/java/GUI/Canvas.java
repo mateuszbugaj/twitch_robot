@@ -7,6 +7,7 @@ import Managment.UserCommand;
 import Robot.SendSerialMessageAction;
 import Robot.SerialCom;
 import Utils.FileReader;
+import Utils.GeneralConfig;
 import processing.core.PApplet;
 import processing.core.PVector;
 
@@ -53,9 +54,9 @@ public class Canvas extends PApplet {
         Camera.p = this;
         webcam = new Camera(370, 40, (int) (640 * 2),(int) (480 * 2));
 
-        SerialCom serialCom = new SerialCom(GUIConfig.serialPort);
+        SerialCom serialCom = new SerialCom(GeneralConfig.serialPort);
         SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
-        commandManager = new CommandManager();
+        commandManager = new CommandManager(serialMessageAction);
 
         TerminalMessageEventHandler terminalHandler = new TerminalMessageEventHandler(System.in,
                 new SaveCommandAction(commandManager).setSaveAsFirst(true)

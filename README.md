@@ -10,9 +10,10 @@
 The aim of this project is to create a desktop app that allows twitch users to control a cartesian manipulator 
 via a channel's chat using basic commands. These commands are displayed in command line interface stylised on 
 BASH. There are windows for displaying instructions and tips, programmed path and real time simulation of  the robot
-updated using messages from the actual robot which is equipped with a web cam to allow users see results.
+updated using messages from the actual robot which is equipped with a webcam to allow users see results.
 <br>
 It's build with maven following the TDD approach using mockito and junit for testing.
+
 ![GUI_demo](https://imgur.com/fAMnI8x.jpg)
 
 ## Technologies <a name="technologies"></a>
@@ -50,6 +51,12 @@ root: x10
 ```
 
 - Ban users from inputting commands
+```
+Type in admin commands: 
+ban user1
+User user1 banned for this session.
+```  
+
 - Grand individual control over the robot for certain time
 
 ## Launch <a name="launch"></a>

@@ -1,6 +1,7 @@
 import GUI.Canvas;
 import GUI.GUIConfig;
 import Utils.FileReader;
+import Utils.GeneralConfig;
 import Utils.UserInputInterpreter;
 import com.fazecast.jSerialComm.SerialPort;
 import exception.InvalidOptionChoice;
@@ -37,7 +38,7 @@ public class TwitchRobot{
         successful = false;
         while (!successful){
             try {
-                GUIConfig.serialPort = UserInputInterpreter.choice(serialPorts);
+                GeneralConfig.serialPort = UserInputInterpreter.choice(serialPorts);
                 successful = true;
             } catch (InvalidOptionChoice e){
                 System.out.println(e.getMessage());

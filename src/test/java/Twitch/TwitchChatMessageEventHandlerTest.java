@@ -3,6 +3,7 @@ package Twitch;
 import Managment.CommandManager;
 import Managment.SaveCommandAction;
 import Robot.SendSerialMessageAction;
+import Utils.GeneralConfig;
 import com.github.twitch4j.chat.events.channel.IRCMessageEvent;
 import org.junit.Assert;
 import org.junit.Before;
@@ -92,6 +93,25 @@ public class TwitchChatMessageEventHandlerTest {
         IRCMessageEvent ircMessageEvent = mock(IRCMessageEvent.class);
         when(ircMessageEvent.getMessage()).thenReturn(Optional.of(testMessage));
         when(ircMessageEvent.getUserName()).thenReturn("user");
+
+        // When
+        eventHandler.accept(ircMessageEvent);
+
+        // Then
+        int commandQueueSize = commandManager.getCommandQueueSize();
+        Assert.assertEquals(0, commandQueueSize);
+    }
+
+    @Test
+    public void commandSendByBannedUser(){
+        // Given
+        String testMessage = "!x10 y20; z30";
+        String userName = "user1";
+
+        IRCMessageEvent ircMessageEvent = mock(IRCMessageEvent.class);
+        when(ircMessageEvent.getMessage()).thenReturn(Optional.of(testMessage));
+        when(ircMessageEvent.getUserName()).thenReturn(userName);
+        GeneralConfig.bannedForSession.add(userName);
 
         // When
         eventHandler.accept(ircMessageEvent);

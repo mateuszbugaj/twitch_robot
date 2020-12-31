@@ -1,5 +1,6 @@
 package Managment;
 
+import Utils.GeneralConfig;
 import Utils.IEnvAction;
 import Utils.MessageToCommandsConverter;
 import exception.InvalidUserCommandException;
@@ -26,6 +27,7 @@ public class TerminalMessageEventHandler implements Runnable{
         System.out.println("Type in admin commands: ");
 
         while(scanner.hasNext()){
+
             lastLine = scanner.nextLine();
             if(lastLine.startsWith("!")){
                 robotCommand(lastLine);
@@ -53,6 +55,8 @@ public class TerminalMessageEventHandler implements Runnable{
     }
 
     public void banUserForSession(String line){
-        System.out.println("Banning...");
+        String userName = line.replaceFirst("ban ", "");
+        GeneralConfig.bannedForSession.add(userName);
+        System.out.printf("User %s banned for this session.\n", userName);
     }
 }

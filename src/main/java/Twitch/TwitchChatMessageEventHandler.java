@@ -2,6 +2,7 @@ package Twitch;
 
 import Managment.SaveCommandAction;
 import Managment.UserCommand;
+import Utils.GeneralConfig;
 import Utils.IEnvAction;
 import Utils.MessageToCommandsConverter;
 import com.github.twitch4j.chat.events.channel.IRCMessageEvent;
@@ -30,13 +31,18 @@ public class TwitchChatMessageEventHandler implements Consumer<IRCMessageEvent> 
     @Override
     public void accept(IRCMessageEvent ircMessageEvent) {
         ircMessageEvent.getMessage().ifPresent(message -> { // todo: there might be better to use .getRawMassage()
-            log.info("New message '" + message + "' from " + ircMessageEvent.getUserName());
+            String userName = ircMessageEvent.getUserName();
+            log.info("New message '" + message + "' from " + userName);
+            if(GeneralConfig.bannedForSession.contains(userName)){
+                log.info(userName + " is banned for this session from inputting commands");
+                return;
+            }
 
             if(message.startsWith("!")){
                 try {
                     List<UserCommand> userCommands = converter.apply(message)
                             .stream()
-                            .map(command -> new UserCommand(command, ircMessageEvent.getUserName()))
+                            .map(command -> new UserCommand(command, userName))
                             .collect(Collectors.toList());
 
                     log.info("Got commands: \n" + userCommands.stream().map(x -> x.toString() + "\n").collect(Collectors.joining()));

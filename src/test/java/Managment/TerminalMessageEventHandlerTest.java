@@ -4,6 +4,7 @@ import Robot.SendSerialMessageAction;
 import Twitch.SendChatMessageAction;
 import Twitch.TwitchChatMessageEventHandler;
 import Twitch.TwitchService;
+import Utils.GeneralConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,5 +52,20 @@ public class TerminalMessageEventHandlerTest {
 
         // Then
         assertEquals(0, commandManager.getCommandList().size());
+    }
+
+    @Test
+    public void banningUsers() {
+        // Given
+        String userName = "user1";
+        String commandMessage = "ban " + userName;
+        ByteArrayInputStream source = new ByteArrayInputStream(commandMessage.getBytes());
+        terminalHandler = new TerminalMessageEventHandler(source, saveCommandAction);
+
+        // When
+        terminalHandler.run();
+
+        // Then
+        assertEquals(userName, GeneralConfig.bannedForSession.get(0));
     }
 }

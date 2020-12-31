@@ -1,6 +1,5 @@
 package GUI;
 
-import com.fazecast.jSerialComm.SerialPort;
 import processing.core.PFont;
 
 public class GUIConfig {
@@ -16,5 +15,4 @@ public class GUIConfig {
     public static PFont consoleFont;
     public static PFont logoFont;
     public static String camDeviceName;
-    public static SerialPort serialPort;
 }
