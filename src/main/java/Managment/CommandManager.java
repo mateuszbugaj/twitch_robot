@@ -69,6 +69,11 @@ public class CommandManager implements RobotPoseSubscriber {
             currentlyExecuting = null;
         }
 
+        if(commandQueue.size()>0){
+            sendCommandToRobot(commandQueue.removeFirst());
+            robotWaiting = false;
+        }
+
         robotLogs.add(log);
     }
 

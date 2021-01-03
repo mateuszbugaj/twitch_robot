@@ -1,11 +1,9 @@
 package GUI;
 
-import Managment.CommandManager;
-import Managment.SaveCommandAction;
-import Managment.TerminalMessageEventHandler;
-import Managment.UserCommand;
+import Managment.*;
 import Robot.SendSerialMessageAction;
 import Robot.SerialCom;
+import Robot.SerialComEventHandler;
 import Utils.FileReader;
 import Utils.GeneralConfig;
 import processing.core.PApplet;
@@ -57,6 +55,12 @@ public class Canvas extends PApplet {
         SerialCom serialCom = new SerialCom(GeneralConfig.serialPort);
         SendSerialMessageAction serialMessageAction = new SendSerialMessageAction(serialCom);
         commandManager = new CommandManager(serialMessageAction);
+        SaveRobotLogAction saveRobotLogAction = new SaveRobotLogAction(commandManager);
+        SerialComEventHandler listener = new SerialComEventHandler(saveRobotLogAction);
+        GeneralConfig.serialPort.addDataListener(listener);
+
+        listener.addPoseSubscribers(commandManager);
+        listener.addPoseSubscribers(simulation);
 
         TerminalMessageEventHandler terminalHandler = new TerminalMessageEventHandler(System.in,
                 new SaveCommandAction(commandManager).setSaveAsFirst(true)

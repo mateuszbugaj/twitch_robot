@@ -50,6 +50,7 @@ public class SerialComEventHandler implements SerialPortDataListener {
 
     }
 
+
     protected String getBuffer(SerialPort serialPort){
         int bytesAvailable = serialPort.bytesAvailable();
         byte[] buffer = new byte[bytesAvailable];
