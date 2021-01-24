@@ -41,6 +41,20 @@ public class TerminalMessageEventHandlerTest {
     }
 
     @Test
+    public void inputCommandWithAbsoluteValues() {
+        // Given
+        String commandMessage = "!a x-9; z10";
+        ByteArrayInputStream source = new ByteArrayInputStream(commandMessage.getBytes());
+        terminalHandler = new TerminalMessageEventHandler(source, saveCommandAction);
+
+        // When
+        terminalHandler.run();
+
+        // Then
+        assertEquals(1, commandManager.getCommandList().size());
+    }
+
+    @Test
     public void inputInvalidCommand() {
         // Given
         String commandMessage = "!xINVALID";

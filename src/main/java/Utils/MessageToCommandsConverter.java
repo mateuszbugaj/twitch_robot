@@ -27,6 +27,6 @@ public class MessageToCommandsConverter implements FunctionWithException<String,
     }
 
     private boolean valid(String command){
-        return command.matches("([xyz ]-?[0-9]{1,3}\\s?){1,3}");
+        return command.matches("(a )?([xyz ]-?[0-9]{1,3}\\s?){1,3}");
     }
 }
