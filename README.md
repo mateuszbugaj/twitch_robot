@@ -1,15 +1,16 @@
-# twitch_robot - Twitch bot as irl robot interface
+# Twitch bot as an IRL robot interface
 
 ## Table of contents
 1. [Introduction](#introduction)
 2. [Technologies](#technologies)
 3. [Options](#options)
 4. [Launch](#launch)
+5. [Cartesian manipulator controller](CartesianManipulatorDefault)
 
 ## Introduction <a name="introduction"></a>
-The aim of this project is to create a desktop app that allows twitch users to control a cartesian manipulator 
-via a channel's chat using basic commands. These commands are displayed in command line interface stylised on 
-BASH. There are windows for displaying instructions and tips, programmed path and real time simulation of  the robot
+This is an app that allows users from around the globe to control a cartesian manipulator using popular streaming service 
+Twitch.tv via a channel's chat using basic commands. Commands are displayed in 'console' stylised on BASH in view. 
+There are windows for displaying instructions and tips, programmed path and real time simulation of  the robot
 updated using messages from the actual robot which is equipped with a webcam to allow users see results.
 <br>
 It's build with maven following the TDD approach using mockito and junit for testing.
@@ -18,11 +19,11 @@ It's build with maven following the TDD approach using mockito and junit for tes
 
 ## Technologies <a name="technologies"></a>
 - Java 11
+- mockito / junit
+- Maven
 - Processing core library
 - twitch4j
 - jSerialComm
-- mockito / junit
-- Maven
 
 ## Options <a name="options"></a>
 

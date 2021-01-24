@@ -7,6 +7,6 @@ enum MICROSTEPPING{
 };
 
 enum DRIVE_FACTOR{
-    BELT = 25, // There should be 25.2 maybe but THERE IS NO CONCEPT OF FLOATING POINT ENUMS IN CPP
-    SCREW = 200
+    BELT = 26, // There should be 26.6 maybe but THERE IS NO CONCEPT OF FLOATING POINT ENUMS IN CPP
+    SCREW = 438
 };

@@ -5,6 +5,7 @@ std::vector<float> interpret(String command, float current_x, float current_y, f
 {
     float x = 0, y = 0, z = 0;
     bool xChange = false, yChange = false, zChange = false;
+    bool absolute = false;
     command.toLowerCase();
 
     char str[command.length() + 1];
@@ -31,6 +32,11 @@ std::vector<float> interpret(String command, float current_x, float current_y, f
 
         switch (leadingChar)
         {
+        case 'a':
+            absolute = true;
+            
+            break;
+
         case 'x':
             x = atof(tok.substring(1).c_str());
             xChange = true;
@@ -48,21 +54,43 @@ std::vector<float> interpret(String command, float current_x, float current_y, f
             zChange = true;
 
             break;
-
         }
     }
 
-    if(xChange == false){
-        x = current_x;
-    }
+    if (absolute)
+    {
+        if (xChange == false)
+        {
+            x = current_x;
+        }
 
-    if(yChange == false){
-        y = current_y;
-    }
+        if (yChange == false)
+        {
+            y = current_y;
+        }
 
-    if(zChange == false){
-        z = current_z;
+        if (zChange == false)
+        {
+            z = current_z;
+        }
+
+        return std::vector<float>{x, y, z};
+    } else {
+        if (xChange == false)
+        {
+            x = 0;
+        }
+
+        if (yChange == false)
+        {
+            y = 0;
+        }
+
+        if (zChange == false)
+        {
+            z = 0;
+        }
+
+        return std::vector<float>{current_x + x, current_y + y, current_z + z};
     }
-    
-    return std::vector<float> {x, y, z};
 }

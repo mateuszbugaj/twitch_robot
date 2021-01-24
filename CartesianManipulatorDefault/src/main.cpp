@@ -3,6 +3,7 @@
 #include <axis.h>
 #include <interpreter.h>
 #include <bits/stdc++.h>
+#include <MultiStepper.h>
 
 // PINOUT
 #define AXIS_X_DIR 25
@@ -18,7 +19,7 @@
 #define ANALOG_Y 35 // Y axis joystick
 
 // constants
-const float MAX_TRAVEL_SPEED = 10;
+const float MAX_TRAVEL_SPEED = 5;
 const float ACCELERATION = 5;
 
 const float MIN_Y = -100;
@@ -28,15 +29,22 @@ const float MAX_X = 120;
 const float MIN_Z = 0;
 const float MAX_Z = 100;
 
+// Axis axisX(AXIS_X_DIR, AXIS_X_STEP, MAX_TRAVEL_SPEED, ACCELERATION, SCREW, QUATER, MIN_X, MAX_X);
 Axis axisX(AXIS_X_DIR, AXIS_X_STEP, MAX_TRAVEL_SPEED, ACCELERATION, SCREW, QUATER, MIN_X, MAX_X);
 Axis axisY(AXIS_Y_DIR, AXIS_Y_STEP, MAX_TRAVEL_SPEED, ACCELERATION, BELT, QUATER, MIN_Y, MAX_Y);
 Axis axisZ(AXIS_Z_DIR, AXIS_Z_STEP, MAX_TRAVEL_SPEED, ACCELERATION, SCREW, QUATER, MIN_Z, MAX_Z);
+
+MultiStepper manipulator;
 
 void setup()
 {
   Serial.begin(115200);
   analogRead(ANALOG_X);
   analogRead(ANALOG_Y);
+
+  manipulator.addStepper(axisX.motor);
+  manipulator.addStepper(axisY.motor);
+  manipulator.addStepper(axisZ.motor);
 }
 
 bool doneSent = true;
@@ -61,52 +69,11 @@ void loop()
       String command = Serial.readString();
       std::vector<float> values = interpret(command, axisX.currentPosition(), axisY.currentPosition(), axisZ.currentPosition());
 
-      axisX.moveTo(values[0]);
-      axisY.moveTo(values[1]);
-      axisZ.moveTo(values[2]);
-
+      long positions[]{axisX.moveTo(values[0]), axisY.moveTo(values[1]), axisZ.moveTo(values[2])};
+      manipulator.moveTo(positions);
       doneSent = false;
     }
   } 
 
-  // Joystick control support
-  analogX = static_cast<int>(analogRead(ANALOG_X) / 100) - 18;
-  if (abs(analogX) > 3)
-  {
-    axisX.setSpeed(analogX);
-    axisX.motor.runSpeed();
-    axisX.motor.moveTo(axisX.motor.currentPosition());
-
-    analogXMoved = true;
-  }
-  else if (analogXMoved)
-  {
-    axisX.setSpeed(0);
-    analogXMoved = false;
-  }
-  else
-  {
-    axisX.run();
-  }
-
-  analogY = static_cast<int>(analogRead(ANALOG_Y) / 100) - 18;
-  if (abs(analogY) > 3)
-  {
-    axisY.setSpeed(analogY);
-    axisY.motor.runSpeed();
-    axisY.motor.moveTo(axisY.motor.currentPosition());
-
-    analogYMoved = true;
-  }
-  else if (analogYMoved)
-  {
-    axisY.setSpeed(0);
-    analogYMoved = false;
-  }
-  else
-  {
-    axisY.run();
-  }
-
-  axisZ.run();
+  manipulator.runSpeedToPosition();
 }

@@ -22,7 +22,7 @@ public:
         motor.setAcceleration(calculateSteps(acc));
     }
 
-    void moveTo(float point)
+    long moveTo(float point)
     {
         if(point < MIN) {
             point = MIN;
@@ -32,7 +32,8 @@ public:
             point = MAX;
         }
 
-        motor.moveTo(calculateSteps(point));
+        // motor.moveTo(calculateSteps(point));
+        return calculateSteps(point);
     }
 
     void setSpeed(float value){
