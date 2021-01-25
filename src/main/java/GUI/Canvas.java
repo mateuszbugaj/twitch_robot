@@ -6,19 +6,16 @@ import Robot.SerialCom;
 import Robot.SerialComEventHandler;
 import Twitch.SendChatMessageAction;
 import Twitch.TwitchChatMessageEventHandler;
-import Twitch.TwitchService;
 import Utils.FileReader;
 import Utils.GeneralConfig;
-import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
-import com.github.twitch4j.TwitchClient;
-import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.chat.events.channel.IRCMessageEvent;
 import processing.core.PApplet;
-import processing.core.PVector;
 
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import static Utils.DisableAccessWarnings.disableAccessWarnings;
+import static Utils.GeneralConfig.twitchClient;
+import static Utils.GeneralConfig.twitchService;
 
 public class Canvas extends PApplet {
     private Simulation simulation;
@@ -64,7 +61,12 @@ public class Canvas extends PApplet {
         commandManager = new CommandManager(serialMessageAction);
         SaveRobotLogAction saveRobotLogAction = new SaveRobotLogAction(commandManager);
         SerialComEventHandler listener = new SerialComEventHandler(saveRobotLogAction);
-        GeneralConfig.serialPort.addDataListener(listener);
+
+        try{
+            GeneralConfig.serialPort.addDataListener(listener);
+        } catch (NullPointerException e){
+
+        }
 
         listener.addPoseSubscribers(commandManager);
         listener.addPoseSubscribers(simulation);
@@ -76,23 +78,12 @@ public class Canvas extends PApplet {
         Thread terminalThread = new Thread(terminalHandler);
         terminalThread.start();
 
-        String channelName = System.getenv("TWITCH_CHANNEL");
-        String twitchToken = System.getenv("TWITCH_TOKEN");
-
-        TwitchClient twitchClient = TwitchClientBuilder
-                .builder()
-                .withEnableHelix(true)
-                .withEnableChat(true)
-                .withChatAccount(new OAuth2Credential(System.getenv("TWITCH_CHANNEL"), twitchToken))
-                .build();
-
-        TwitchService twitchService = new TwitchService(twitchClient, channelName);
-
-        twitchClient.getEventManager().onEvent(IRCMessageEvent.class,
-                new TwitchChatMessageEventHandler(
-                        new SaveCommandAction(commandManager),
-                        new SendChatMessageAction(twitchService))
-        );
+        if(twitchClient != null){
+            twitchClient.getEventManager().onEvent(IRCMessageEvent.class,
+                    new TwitchChatMessageEventHandler(
+                            new SaveCommandAction(commandManager),
+                            new SendChatMessageAction(twitchService)));
+        }
     }
 
     @Override
@@ -226,10 +217,6 @@ public class Canvas extends PApplet {
             lineYPos += GUIConfig.consoleFont.getSize()*1.2;
 
         }
-    }
-
-    public void showChat(){
-
     }
 
 }
