@@ -62,15 +62,9 @@ public class Canvas extends PApplet {
         SaveRobotLogAction saveRobotLogAction = new SaveRobotLogAction(commandManager);
         SerialComEventHandler listener = new SerialComEventHandler(saveRobotLogAction);
 
-<<<<<<< HEAD
-        if(GeneralConfig.serialPort != null){
-            GeneralConfig.serialPort.addDataListener(listener);
-=======
-        try{
-            GeneralConfig.serialPort.addDataListener(listener);
-        } catch (NullPointerException e){
 
->>>>>>> bf8206b0c35468a9d542ccbf3bcca5e6d319c7ea
+        if(GeneralConfig.serialPort != null) {
+            GeneralConfig.serialPort.addDataListener(listener);
         }
 
         listener.addPoseSubscribers(commandManager);
