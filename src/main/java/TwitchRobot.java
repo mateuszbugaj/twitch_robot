@@ -1,9 +1,13 @@
 import GUI.Canvas;
 import GUI.GUIConfig;
+import Twitch.TwitchService;
 import Utils.FileReader;
 import Utils.GeneralConfig;
 import Utils.UserInputInterpreter;
 import com.fazecast.jSerialComm.SerialPort;
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
+import com.github.twitch4j.TwitchClient;
+import com.github.twitch4j.TwitchClientBuilder;
 import exception.InvalidOptionChoice;
 import processing.core.PApplet;
 import processing.video.Capture;
@@ -45,6 +49,40 @@ public class TwitchRobot{
             }
         }
 
+        // Enable twitch.tv connection
+        System.out.println("\nEnable twitch.tv connection?: ");
+        successful = false;
+        List<Boolean> booleanList = Arrays.asList(true, false);
+        Boolean enableTwitch = null;
+        while (!successful){
+            try {
+                enableTwitch = UserInputInterpreter.choice(booleanList);
+                successful = true;
+            } catch (InvalidOptionChoice e){
+                System.out.println(e.getMessage());
+            }
+        }
+
+        if(enableTwitch != null && enableTwitch){
+            String channelName = System.getenv("TWITCH_CHANNEL");
+            String twitchToken = System.getenv("TWITCH_TOKEN");
+
+            System.out.println(channelName);
+            System.out.println(twitchToken);
+
+            GeneralConfig.twitchClient = TwitchClientBuilder
+                    .builder()
+                    .withEnableHelix(true)
+                    .withEnableChat(true)
+                    .withChatAccount(new OAuth2Credential(System.getenv("TWITCH_CHANNEL"), twitchToken))
+                    .build();
+
+            GeneralConfig.twitchService = new TwitchService(GeneralConfig.twitchClient, channelName);
+
+        }
+
         PApplet.main(Canvas.class);
     }
 }
+
+
