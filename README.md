@@ -58,7 +58,7 @@ ban user1
 User user1 banned for this session.
 ```  
 
-- Grand individual control over the robot for certain time
+- Grand individual control over the robot for certain time (TODO)
 
 ## Launch <a name="launch"></a>
 Tested with AdoptOpenJDK 11 (There might be an error running on other java distributions) <br>

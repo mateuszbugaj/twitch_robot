@@ -20,6 +20,9 @@ Here are examples:
 !x15; y10
 (moves first to the x=15, then y=10)
 
-There are limitations to the range of
-motion but you can try to brake them.
-Have fun.
+You can specify absolute position
+by adding 'a' at the beginning of the
+command:
+!a x10 y0 z0
+(moves to the point [10, 0, 0])
+!a x10 (moves only axis X to [10])
